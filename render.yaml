@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: wedding-registry
+    name: pedroesabrina
     env: docker
     plan: free
     healthCheckPath: /
