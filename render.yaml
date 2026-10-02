@@ -3,6 +3,7 @@ services:
     name: wedding-registry
     env: docker
     plan: free
+    preDeployCommand: python manage.py migrate
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
