@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" style="padding-top: 120px; min-height: 80vh;">
+    <div class="container" style="max-width: 600px; margin: 0 auto;">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+            <p>Preencha os dados do presente</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="reservation-form" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-family: var(--font-heading); color: var(--color-text);">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <span style="color: red; font-size: 0.85rem;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div style="display: flex; gap: 15px; margin-top: 2rem;">
+                <a href="{% url 'panel_dashboard' %}" class="btn btn-outline" style="flex: 1; text-align: center;">Cancelar</a>
+                <button type="submit" class="btn" style="flex: 2;">Salvar Presente</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Additional inline CSS to make django form inputs look nice without bootstrap -->
+<style>
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--color-bg-secondary);
+        border-radius: 8px;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+</style>
+{% endblock %}

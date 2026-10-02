@@ -1,0 +1,125 @@
+/* Custom Theme for Django Admin based on Wedding Registry Palette */
+
+:root {
+    --primary: #B96F58; /* Terracota */
+    --secondary: #49352D; /* Marrom escuro */
+    --accent: #E9A477; /* Pêssego */
+    --primary-fg: #fff;
+    
+    --body-fg: #49352D;
+    --body-bg: #F8F1E7; /* Creme / Off-white */
+    --body-quiet-color: #666;
+    --body-loud-color: #000;
+    
+    --header-color: #F8F1E7;
+    --header-branding-color: #fff;
+    --header-bg: #49352D;
+    --header-link-color: #F8F1E7;
+    
+    --breadcrumbs-fg: #F8F1E7;
+    --breadcrumbs-link-fg: #fff;
+    --breadcrumbs-bg: #B96F58;
+    
+    --link-fg: #B96F58;
+    --link-hover-color: #C77B82; /* Rosa Queimado */
+    --link-selected-fg: #B96F58;
+    
+    --hairline-color: #E8D5BD; /* Areia */
+    --border-color: #E8D5BD;
+    
+    --error-fg: #a84646;
+    --message-success-bg: rgba(92, 138, 107, 0.1);
+    --message-warning-bg: #ffc;
+    --message-error-bg: rgba(168, 70, 70, 0.1);
+    
+    --darkened-bg: #E8D5BD;
+    --selected-bg: rgba(185, 111, 88, 0.1);
+    --selected-row: rgba(185, 111, 88, 0.05);
+    
+    --button-bg: #B96F58;
+    --button-fg: #fff;
+    --button-hover-bg: #49352D;
+    --default-button-bg: #B96F58;
+    --default-button-hover-bg: #49352D;
+    --close-button-bg: #a84646;
+    --close-button-hover-bg: #803030;
+    --delete-button-bg: #a84646;
+    --delete-button-hover-bg: #803030;
+
+    --font-family-primary: 'Lora', serif;
+    --font-family-heading: 'Playfair Display', serif;
+}
+
+body {
+    font-family: var(--font-family-primary);
+}
+
+h1, h2, h3, h4, h5, h6, #site-name {
+    font-family: var(--font-family-heading);
+}
+
+#header {
+    background-color: var(--secondary);
+    color: var(--primary-fg);
+}
+
+div.breadcrumbs {
+    background-color: var(--primary);
+    color: var(--primary-fg);
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: var(--darkened-bg);
+    color: var(--body-fg);
+}
+
+#changelist-filter h2 {
+    background: var(--darkened-bg);
+    color: var(--body-fg);
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--button-bg);
+    color: var(--button-fg);
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: none;
+    font-family: var(--font-family-primary);
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: var(--button-hover-bg);
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--default-button-bg);
+}
+
+.button.default:hover, input[type=submit].default:hover {
+    background: var(--default-button-hover-bg);
+}
+
+/* Make inputs look a bit nicer */
+input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel], textarea, select, .vTextField {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px;
+    font-family: var(--font-family-primary);
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=url]:focus, input[type=number]:focus, input[type=tel]:focus, textarea:focus, select:focus, .vTextField:focus {
+    border-color: var(--primary);
+}
+
+/* Card styling for modules */
+.module {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(73, 53, 45, 0.05);
+    border: none;
+    overflow: hidden;
+}
+
+#content-main {
+    padding-top: 20px;
+}

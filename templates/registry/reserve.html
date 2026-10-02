@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservar {{ gift.name }} - {{ settings.couple_name }}{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 80vh; display: flex; align-items: center;">
+    <div class="container" style="max-width: 600px;">
+        <div style="background: #fff; padding: var(--spacing-lg) var(--spacing-md); border-radius: var(--radius-lg); box-shadow: 0 4px 20px rgba(73, 53, 45, 0.05);">
+            <a href="{% url 'home' %}#lista-presentes" style="display: inline-block; margin-bottom: var(--spacing-md); font-size: 0.9rem;">&larr; Voltar para a lista</a>
+            
+            <h1 style="margin-bottom: var(--spacing-xs);">{{ gift.name }}</h1>
+            <p style="margin-bottom: var(--spacing-md); color: var(--color-primary);">Disponível: {{ gift.available_quantity }} unidade{{ gift.available_quantity|pluralize }}</p>
+            
+            {% if gift.image %}
+                <img src="{{ gift.image.url }}" alt="{{ gift.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+            {% endif %}
+            
+            <form method="post" action="{% url 'reserve_gift' gift.id %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="guest_name" class="form-label">Seu Nome</label>
+                    <input type="text" id="guest_name" name="guest_name" class="form-control" required placeholder="Como os noivos te conhecem?">
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantity" class="form-label">Quantidade</label>
+                    <select id="quantity" name="quantity" class="form-control" required>
+                        {% for i in "x"|ljust:gift.available_quantity %}
+                            <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message" class="form-label">Mensagem aos noivos (Opcional)</label>
+                    <textarea id="message" name="message" class="form-control" placeholder="Deixe uma mensagem especial..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: var(--spacing-sm);">Confirmar Reserva</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

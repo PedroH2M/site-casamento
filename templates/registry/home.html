@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" {% if settings.hero_image %}style="background-image: url('{{ settings.hero_image.url }}');"{% endif %}>
+    <div class="hero-content">
+        <h1>{{ settings.couple_name }}</h1>
+        <p>{{ settings.main_quote }}</p>
+        {% if settings.wedding_date %}
+            <p><strong>{{ settings.wedding_date|date:"d \d\e F \d\e Y" }}</strong></p>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'panel_dashboard' %}" class="btn" style="background: white; color: var(--color-primary); border-radius: 30px;">Abrir o Meu Painel</a>
+        {% else %}
+        <a href="#lista-presentes" class="btn">Ver nossa lista</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Nossa História -->
+{% if settings.our_story %}
+<section class="section" id="historia">
+    <div class="container" style="text-align: center; max-width: 800px;">
+        <h2 class="section-title">Nossa História</h2>
+        {% if settings.story_image %}
+            <img src="{{ settings.story_image.url }}" alt="Nossa história" style="border-radius: var(--radius-lg); margin-bottom: var(--spacing-md);">
+        {% endif %}
+        <p style="white-space: pre-line; text-align: left;">{{ settings.our_story }}</p>
+    </div>
+</section>
+{% endif %}
+
+<!-- O Casamento -->
+{% if settings.wedding_date or settings.location_name %}
+<section class="section" id="o-casamento" style="background-color: var(--color-bg-secondary);">
+    <div class="container" style="text-align: center;">
+        <h2 class="section-title">O Casamento</h2>
+        
+        {% if settings.wedding_date %}
+        <div style="margin-bottom: var(--spacing-md);">
+            <h3>Quando</h3>
+            <p>{{ settings.wedding_date|date:"d/m/Y \à\s H:i" }}</p>
+        </div>
+        {% endif %}
+        
+        {% if settings.location_name %}
+        <div>
+            <h3>Onde</h3>
+            <p><strong>{{ settings.location_name }}</strong></p>
+            <p>{{ settings.location_address }}</p>
+            {% if settings.location_map_link %}
+                <a href="{{ settings.location_map_link }}" target="_blank" class="btn btn-outline" style="margin-top: var(--spacing-sm);">Ver no Mapa</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Lista de Presentes -->
+<section class="section" id="lista-presentes">
+    <div class="container">
+        <h2 class="section-title">Lista de Presentes</h2>
+        
+        {% if categories %}
+            <div class="categories-nav">
+                <a href="#lista-presentes" class="category-link active">Todos</a>
+                {% for cat_data in categories %}
+                    <a href="#cat-{{ cat_data.category.id }}" class="category-link">{{ cat_data.category.name }}</a>
+                {% endfor %}
+            </div>
+
+            {% for cat_data in categories %}
+                <div id="cat-{{ cat_data.category.id }}" style="margin-bottom: var(--spacing-lg);">
+                    <h3 style="margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--color-bg-secondary); padding-bottom: var(--spacing-xs);">{{ cat_data.category.name }}</h3>
+                    <div class="gifts-grid">
+                        {% for gift in cat_data.gifts %}
+                            <div class="gift-card">
+                                {% if gift.image %}
+                                    <img src="{{ gift.image.url }}" alt="{{ gift.name }}" class="gift-image">
+                                {% else %}
+                                    <div class="gift-image" style="display:flex; align-items:center; justify-content:center; color: var(--color-text); opacity: 0.5;">
+                                        Sem foto
+                                    </div>
+                                {% endif %}
+                                <div class="gift-content">
+                                    <h4 class="gift-title">{{ gift.name }}</h4>
+                                    
+                                    {% if gift.status == 'reserved' %}
+                                        <p class="gift-status reserved">Esse presente já foi escolhido. ❤️</p>
+                                    {% elif gift.status == 'partially' %}
+                                        <p class="gift-status">Restam {{ gift.available_quantity }} de {{ gift.total_quantity }} unidades.</p>
+                                    {% else %}
+                                        <p class="gift-status">{{ gift.available_quantity }} unidades disponíveis.</p>
+                                    {% endif %}
+                                    
+                                    <div class="gift-actions">
+                                        {% if gift.status != 'reserved' %}
+                                            <a href="{% url 'reserve_gift' gift.id %}" class="btn" style="width: 100%;">Quero presentear</a>
+                                        {% else %}
+                                            <button class="btn" style="width: 100%;" disabled>Esgotado</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: var(--color-text); opacity: 0.7;">Ainda não adicionamos presentes.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Mensagens dos Convidados -->
+{% if settings.show_messages and guest_messages %}
+<section class="section" id="mensagens" style="background-color: var(--color-bg-secondary);">
+    <div class="container">
+        <h2 class="section-title">Mensagens para nós</h2>
+        <div class="messages-grid">
+            {% for msg in guest_messages %}
+                <div class="message-card">
+                    <p class="message-text">"{{ msg.message }}"</p>
+                    <p class="message-author">— {{ msg.guest_name }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- PIX -->
+{% if settings.pix_key %}
+<section class="section" id="pix">
+    <div class="container">
+        <div class="pix-section">
+            <h2 style="margin-bottom: var(--spacing-sm);">Contribuir de outra forma</h2>
+            <p>{{ settings.pix_text }}</p>
+            
+            {% if settings.pix_qrcode %}
+                <img src="{{ settings.pix_qrcode.url }}" alt="QR Code PIX" class="pix-qrcode">
+            {% endif %}
+            
+            <div class="pix-key" style="max-width: 400px; margin: var(--spacing-md) auto;">
+                <input type="text" id="pix-key-input" value="{{ settings.pix_key }}" readonly style="border:none; width:100%; background:transparent; font-family:var(--font-body); outline:none;">
+            </div>
+            
+            <button onclick="copyPix()" id="btn-copy" class="btn">Copiar chave PIX</button>
+            
+            {% if settings.pix_name %}
+                <p style="margin-top: var(--spacing-sm); font-size: 0.9rem;"><strong>Nome:</strong> {{ settings.pix_name }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

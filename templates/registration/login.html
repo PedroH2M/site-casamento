@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" style="padding-top: 150px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container" style="max-width: 400px; width: 100%;">
+        <div class="section-title text-center">
+            <h2>Acesso ao Painel</h2>
+            <p>Faça login para gerenciar o seu casamento</p>
+        </div>
+
+        <div class="card" style="padding: 2rem; border-radius: var(--radius-lg); background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 10px; border-radius: 4px; margin-bottom: 1rem; text-align: center;">
+                    Usuário ou senha incorretos. Tente novamente.
+                </div>
+                {% endif %}
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="id_username" style="display: block; margin-bottom: 0.5rem; color: var(--text-color); font-weight: 500;">Usuário</label>
+                    <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" style="width: 100%; padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: var(--radius-md);">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="id_password" style="display: block; margin-bottom: 0.5rem; color: var(--text-color); font-weight: 500;">Senha</label>
+                    <input type="password" name="password" autocomplete="current-password" required="" id="id_password" style="width: 100%; padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: var(--radius-md);">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar no Painel</button>
+            </form>
+            
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <a href="{% url 'home' %}" style="color: var(--text-light); text-decoration: none; font-size: 0.9rem;">← Voltar para o Site</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

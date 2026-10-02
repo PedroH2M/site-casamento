@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" style="padding-top: 120px;">
+    <div class="container">
+        <div class="section-title">
+            <h2>Gestão do Casamento</h2>
+            <p>Seu painel rápido e intuitivo</p>
+            <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                <a href="{% url 'home' %}" class="btn btn-outline">← Voltar para o Site</a>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'home' %}">
+                    <button type="submit" class="btn btn-outline" style="border-color: #a84646; color: #a84646;">Sair (Logout)</button>
+                </form>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+            <h3>Meus Presentes</h3>
+            <a href="{% url 'panel_gift_create' %}" class="btn">Adicionar Novo Presente</a>
+        </div>
+
+        <div class="gifts-grid">
+            {% for gift in gifts %}
+            <div class="gift-card" style="position: relative;">
+                {% if gift.image %}
+                    <div class="gift-img" style="background-image: url('{{ gift.image.url }}'); height: 200px; background-size: cover; background-position: center;"></div>
+                {% else %}
+                    <div class="gift-img" style="background-color: var(--color-bg-secondary); height: 200px; display: flex; align-items: center; justify-content: center;">Sem Foto</div>
+                {% endif %}
+                
+                <div class="gift-info">
+                    <h4>{{ gift.name }}</h4>
+                    <p>{{ gift.category.name }}</p>
+                    <p style="font-size: 0.9rem; color: var(--color-primary);">Status: {{ gift.get_status_display }} ({{ gift.reserved_quantity }}/{{ gift.total_quantity }} reservados)</p>
+                    
+                    <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                        <a href="{% url 'panel_gift_edit' gift.id %}" class="btn" style="flex: 1; padding: 0.5rem; text-align: center;">Editar</a>
+                        <form action="{% url 'panel_gift_delete' gift.id %}" method="post" style="flex: 1;" onsubmit="return confirm('Tem certeza que deseja deletar?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline" style="width: 100%; padding: 0.5rem; text-align: center;">Deletar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Você ainda não cadastrou nenhum presente.</p>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 4rem;">
+            <h3>Reservas e Mensagens</h3>
+            {% if reservations %}
+            <div style="overflow-x: auto; margin-top: 1rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--color-bg-secondary);">
+                            <th style="padding: 1rem;">Convidado</th>
+                            <th style="padding: 1rem;">Presente</th>
+                            <th style="padding: 1rem;">Quantidade</th>
+                            <th style="padding: 1rem;">Status</th>
+                            <th style="padding: 1rem;">Mensagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in reservations %}
+                        <tr style="border-bottom: 1px solid var(--color-bg-secondary);">
+                            <td style="padding: 1rem;">{{ r.guest_name }}</td>
+                            <td style="padding: 1rem;">{{ r.gift.name }}</td>
+                            <td style="padding: 1rem;">{{ r.quantity }}</td>
+                            <td style="padding: 1rem;">{{ r.get_status_display }}</td>
+                            <td style="padding: 1rem;">{{ r.message|default:"-" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Nenhuma reserva foi feita ainda.</p>
+            {% endif %}
+        </div>
+        
+    </div>
+</section>
+{% endblock %}
