@@ -122,6 +122,7 @@ img {
   text-align: center;
   background-size: cover;
   background-position: center;
+  background-image: url('../img/hero-bg.jpg');
   padding: var(--spacing-xl) var(--spacing-md);
 }
 .hero::before {
